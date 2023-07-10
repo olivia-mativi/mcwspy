@@ -1,8 +1,25 @@
+""" mcwspy - A MasterControl WebServices API Abstraction Module in Python
+    Copyright (C) 2023  Olivia Mativi
+
+    This program is free software: you can redistribute it and/or modify
+    it under the terms of the GNU Affero General Public License as published
+    by the Free Software Foundation, either version 3 of the License, or
+    (at your option) any later version.
+
+    This program is distributed in the hope that it will be useful,
+    but WITHOUT ANY WARRANTY; without even the implied warranty of
+    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+    GNU Affero General Public License for more details.
+
+    You should have received a copy of the GNU Affero General Public License
+    along with this program.  If not, see <https://www.gnu.org/licenses/>."""
+
 import os
 import requests                # https://requests.readthedocs.io/en/latest/
 from dotenv import load_dotenv # https://github.com/theskumar/python-dotenv
-from array import array
+#from array import array
 from struct import Struct
+from typing import List
 
 
 class CustomField:
@@ -11,12 +28,12 @@ class CustomField:
                  isRequired: bool = None,
                  label: str = None,
                  type: str = None,
-                 values: array = None) -> None:
+                 values: List = None) -> None:
         pass
 
 
 class CustomFieldTaskOption:
-    def __init__(self, customFields: array[CustomField], _CF: CustomField = None) -> None:
+    def __init__(self, customFields: List[CustomField], _CF: CustomField = None) -> None:
         pass
 
 
@@ -31,9 +48,9 @@ class TaskSignoffStatus:
                  hasRejectToStep: bool = None,
                  id: str = None,
                  name: str = None,
-                 rejectableSteps: array = None,
+                 rejectableSteps: List = None,
                  setDates: bool = None,
-                 statusSteps: array = None,
+                 statusSteps: List = None,
                  translatedName: str = None) -> None:
         pass
 
@@ -50,15 +67,15 @@ class PacketTypeInformation:
                  enableChildTaskNumberingSeries: bool = None,
                  enableDueDate: bool = None,
                  requireChangeRequest: bool = None,
-                 selectedLaunchableProcessWorkflows: array[str] = None) -> None:
+                 selectedLaunchableProcessWorkflows: List[str] = None) -> None:
         pass
 
 
 class PacketContentOptions:
     def __init__(self,
                  dispositionEnabled: bool = None,
-                 optionalCustomFields: array[CustomField] = None,
-                 requiredCustomFields: array[CustomField] = None,
+                 optionalCustomFields: List[CustomField] = None,
+                 requiredCustomFields: List[CustomField] = None,
                  useCustomFieldsForDisposition: bool = None) -> None:
         pass
 
@@ -66,9 +83,9 @@ class PacketContentOptions:
 class OptionalPacketSections:
     def __init__(self,
                  customFieldsEnabled: bool = None,
-                 optionalCustomFields: array[CustomField] = None,
+                 optionalCustomFields: List[CustomField] = None,
                  regulatoryAffairsAssessmentEnabled: bool = None,
-                 requiredCustomFields: array[CustomField] = None,
+                 requiredCustomFields: List[CustomField] = None,
                  riskAssessmentEnabled: bool = None,
                  supportingInformationEnabled: bool = None,
                  validationEnabled: bool = None,
@@ -78,11 +95,11 @@ class OptionalPacketSections:
 
 class PacketType:
     def __init__(self,
-                 defaultWorkflows: array[str],
+                 defaultWorkflows: List[str],
                  isAdvanced: bool,
                  name: str,
                  numberingSeries: str,
-                 businessUnits: array[str] = None,
+                 businessUnits: List[str] = None,
                  optionalPacketSections: OptionalPacketSections = None,
                  packetContentOptions: PacketContentOptions = None,
                  packetTypeInformation: PacketTypeInformation = None) -> None:
@@ -110,10 +127,10 @@ class KeyValuePair:
 
 
 class InfoCardPhaseList:
-    def __init__(self, allPhases: array = None, infocardID: str = None,
-                 infoCardNumber: str = None, invalidPhases: array = None,
+    def __init__(self, allPhases: List = None, infocardID: str = None,
+                 infoCardNumber: str = None, invalidPhases: List = None,
                  revision: str = None, selectedPhaseID: str = None,
-                 validPhases: array = None) -> None:
+                 validPhases: List = None) -> None:
         pass
 
 
@@ -124,7 +141,7 @@ class DispositionFields:
                  market: str,
                  WIP: str,
                  _CF: CustomField = None,
-                 customFields: array = None) -> None:
+                 customFields: List = None) -> None:
         pass
 
 
@@ -136,16 +153,16 @@ class AdvancedPacketTaskOptionFile:
 class InfoCard:
     def __init__(self,
                  action: str = None,
-                 attachments: array = None,
+                 attachments: List = None,
                  author: str = None,
                  changeNumber: str = None,
                  completed=None, 
                  created=None, 
-                 customFields: array[KeyValuePair] = None,
+                 customFields: List[KeyValuePair] = None,
                  effective=None,
                  expiration=None,
                  file: File = None,
-                 formFields: array = None,
+                 formFields: List = None,
                  infoCardID: str = None,
                  infoCardNumber: str = None,
                  infocardtype: str = None,
@@ -171,11 +188,11 @@ class AdvancedPacketTaskOption:
                  isRequired: bool,
                  optionName: str,
                  typeID: int,
-                 _fileAttachments: array[AdvancedPacketTaskOptionFile] = None,
+                 _fileAttachments: List[AdvancedPacketTaskOptionFile] = None,
                  _infoCardLinks: InfoCard = None,
                  details: str = None,
-                 fileAttachments: array[AdvancedPacketTaskOptionFile] = None,
-                 infoCardLinks: array[InfoCard] = None,
+                 fileAttachments: List[AdvancedPacketTaskOptionFile] = None,
+                 infoCardLinks: List[InfoCard] = None,
                  justification: str = None) -> None:
         pass
 
@@ -200,9 +217,9 @@ class AdvancedPacketTask:
                  isChangeRequest: bool,
                  proposedChanges: str,
                  reasonForChanges: str,
-                 taskContents: array[AdvancedPacketTaskContent],
+                 taskContents: List[AdvancedPacketTaskContent],
                  taskNumber: str,
-                 taskOptions: array[AdvancedPacketTaskOption],
+                 taskOptions: List[AdvancedPacketTaskOption],
                  _customFieldtaskOption: CustomFieldTaskOption = None,
                  dueDate=None,
                  expirationDate=None) -> None:
@@ -213,7 +230,7 @@ class AdvancedPacketType:
     def __init__(self, numberingSeries: str, packetTypeName: str,
                  allowAttachmentsAndLinksOnAllSteps: bool = None,
                  allowPacketToBeEditedDuringChangeRequestStep: bool = None,
-                 defaultWorkflows: array = None,
+                 defaultWorkflows: List = None,
                  dispositionCustomFields: Struct = None,
                  dispositionEnabled: bool = None,
                  enableChildTaskNumberingSeries: bool = None,
@@ -223,7 +240,7 @@ class AdvancedPacketType:
                  regulatoryAffairsAssessment: bool = None,
                  requireChangeRequestStepOnWorkflow: bool = None,
                  riskAssessment: bool = None,
-                 selectedProcessWorkflows: array = None,
+                 selectedProcessWorkflows: List = None,
                  supportingInformation: bool = None,
                  useCustomFieldsForDisposition: bool = None,
                  validation: bool = None,
@@ -250,7 +267,7 @@ class User:
                  employeeNumber : str = None, enabled : bool = None, esigLocked : str = None,
                  esigPassword : str = None, fax : str = None, firstName : str = None,
                  lastName : str = None, loginLocked : str = None, message : str = None,
-                 password : str = None, phone : str = None, roles : array = None,
+                 password : str = None, phone : str = None, roles : List = None,
                  state : str = None, suffix : str = None, supervisor : str = None,
                  title : str = None, userGUID : str = None, userID : str = None,
                  userName : str = None, zipcode : str = None) -> None:
@@ -265,12 +282,27 @@ class Comment:
 
 
 class Comments:
-    def __init__(self, comments: array[Comment] = None, message: str = None) -> None:
+    def __init__(self, comments: List[Comment] = None, message: str = None) -> None:
         pass
 
 
 class Version:
     def __init__(self, application: str = None, version: str = None) -> None:
+        pass
+
+
+class InfoCardType:
+    def __init__(self, name: str, type: str) -> None:
+        """An InfoCard Type object for use in creating or modifying IC Types and their relationships.
+
+        Args:
+            name (str): the name of the infocard type
+            type (str): the type of the infocard type. valid options: "Document", "Organizer",
+            "Form Template", "Form", "Course", "Job Code", "Trainee", "Trainer", "Exam",
+            "Project Templates", "Projects", "BOM", "Submissions Locker", "Supplier",
+            "Audit Checklist", "Audit", "Risk File", "Audit Entity", "Word Template",
+            "GCP Study", and "GLP Study".
+        """
         pass
 
 
@@ -310,7 +342,7 @@ class Session:
     def get_packet_type(self, packetName: str) -> PacketType:
         pass
 
-    def get_packet_types(self, filter: str = None) -> array[PacketType]:
+    def get_packet_types(self, filter: str = None) -> List[PacketType]:
         pass
 
     def get_advanced_packet_task_with_packet_id(self, packetID: str) -> AdvancedPacketTask:
@@ -318,7 +350,7 @@ class Session:
 
     def create_advanced_packet_type(self, 
                                  advancedPacketTypeOptions: AdvancedPacketType, 
-                                 businessUnits: array[str]) -> bool:
+                                 businessUnits: List[str]) -> bool:
         pass
 
     # ApprovalService Methods
@@ -387,8 +419,27 @@ class Session:
         pass
 
     # CustomFieldService Methods
+
+    def assign_custom_fields_to_infocard_types(self, connectionID: str,
+                                               infoCardTypes: List[InfoCardType],
+                                               customFields: List[CustomField],
+                                               changeReason: str) -> bool:
+        pass
+
     # DatasetService Methods
+
+    def get_dataset_data(self, connectionID: str, datasetName: str, recordID: str) -> str:
+        pass
+
+    def get_external_data_set_as_json(self, connectionID: str, datasetName: str, parameters: Struct) -> str:
+        pass
+
     # DataStructureService Methods
+
+    def get_external_data_structure_data(self, connectionID: str, externalDataStructureName: str,
+                                         filterParameters: List=None, returnQuery: bool=None) -> any:
+        pass
+
     # EnterpriseBusinessUnitService Methods
     # ExamService Methods
     # ExternalGUIService Methods
