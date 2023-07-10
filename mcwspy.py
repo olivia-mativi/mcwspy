@@ -261,16 +261,16 @@ class MissingEnvironmentVariableError(Exception):
 
 class User:
     def __init__(self, address1: str = None, address2: str = None, changeApproveOnNextLogin: str = None,
-                 changePasswordOnNextLogin : str = None, city : str = None, company : str = None,
-                 country : str = None, createdate = None, createdBy : str = None, deleteDate = None,
-                 department : str = None, displayName : str = None, email : str = None,
-                 employeeNumber : str = None, enabled : bool = None, esigLocked : str = None,
-                 esigPassword : str = None, fax : str = None, firstName : str = None,
-                 lastName : str = None, loginLocked : str = None, message : str = None,
-                 password : str = None, phone : str = None, roles : List = None,
-                 state : str = None, suffix : str = None, supervisor : str = None,
-                 title : str = None, userGUID : str = None, userID : str = None,
-                 userName : str = None, zipcode : str = None) -> None:
+                 changePasswordOnNextLogin: str = None, city: str = None, company: str = None,
+                 country: str = None, createdate = None, createdBy: str = None, deleteDate = None,
+                 department: str = None, displayName: str = None, email: str = None,
+                 employeeNumber: str = None, enabled: bool = None, esigLocked: str = None,
+                 esigPassword: str = None, fax: str = None, firstName: str = None,
+                 lastName: str = None, loginLocked: str = None, message: str = None,
+                 password: str = None, phone: str = None, roles: List = None,
+                 state: str = None, suffix: str = None, supervisor: str = None,
+                 title: str = None, userGUID: str = None, userID: str = None,
+                 userName: str = None, zipcode: str = None) -> None:
         pass
 
 
@@ -306,8 +306,58 @@ class InfoCardType:
         pass
 
 
+class EBUEntity:
+    def __init__(self, name: str = None, type: str = None) -> None:
+        pass
+        
+
+class ExamAnswer:
+    def __init__(self, answerID: str = None, correct: str = None,
+                 correctOrder=None, displayOrder=None, matchText: str = None,
+                 questionID: str = None, text: str = None) -> None:
+        pass
+
+
+class ExamQuestion:
+    def __init__(self, _a: ExamAnswer = None, answers: List[ExamAnswer] = None,
+                 correctAnswer: str = None, desc: str = None, examID: str = None,
+                 failIfWrong=None, order=None, points: int=None,
+                 questionID: str = None, required=None, text: str = None,
+                 type: str = None) -> None:
+        pass
+
+
+class Exam:
+    def __init__(self, _a: ExamAnswer = None, _q: ExamQuestion = None,
+                 questions: List[ExamQuestion]=None) -> None:
+        pass
+
+
+class BinaryFile:
+    def __init__(self, checksum: str = None, content: bin = None,
+                 filename: str = None, message: str = None,
+                 mimeType: str = None) -> None:
+        pass
+
+
+class Query:
+    def __init__(self, name: str = None, qArray: List = None) -> None:
+        pass
+
+
+class Vault:
+    def __init__(self, description: str = None, id: str = None,
+                 message: str = None, name: str = None) -> None:
+        pass
+
+
+class Vaults:
+    def __init__(self, vaults: List[Vault] = None) -> None:
+        pass
+
+
 class Session:
-    def __init__(self, logout: bool = False) -> None:
+    def __init__(self, logout: bool=False) -> None:
         """Creates a new MasterControl WS Session
 
         Args:
@@ -396,13 +446,13 @@ class Session:
     def connect_with_api_key(self, apikey: str, logoutCurrentWebConnection: bool = False) -> str:
         pass
 
-    def disconnect(self, connectionID: str) -> bool:
+    def disconnect(self) -> bool:
         pass
 
-    def is_connected(self, connectionID: str) -> bool:
+    def is_connected(self) -> bool:
         pass
 
-    def get_user_id(self, connectionID: str) -> str:
+    def get_user_id(self) -> str:
         pass
 
     def get_version(self) -> Version:
@@ -413,14 +463,14 @@ class Session:
 
     # CopyService Methods
 
-    def email(self, connectionID: str, infoCardNumber: str, revision: str, 
+    def email(self, infoCardNumber: str, revision: str, 
               emailAddresses: str, emailSubject: str = None, emailMessage: str = None, 
-              usePublished: bool = False) -> str:
+              usePublished: bool=False) -> str:
         pass
 
     # CustomFieldService Methods
 
-    def assign_custom_fields_to_infocard_types(self, connectionID: str,
+    def assign_custom_fields_to_infocard_types(self, 
                                                infoCardTypes: List[InfoCardType],
                                                customFields: List[CustomField],
                                                changeReason: str) -> bool:
@@ -428,23 +478,58 @@ class Session:
 
     # DatasetService Methods
 
-    def get_dataset_data(self, connectionID: str, datasetName: str, recordID: str) -> str:
+    def get_dataset_data(self, datasetName: str, recordID: str) -> str:
         pass
 
-    def get_external_data_set_as_json(self, connectionID: str, datasetName: str, parameters: Struct) -> str:
+    def get_external_data_set_as_json(self, datasetName: str, parameters: Struct) -> str:
         pass
 
     # DataStructureService Methods
 
-    def get_external_data_structure_data(self, connectionID: str, externalDataStructureName: str,
-                                         filterParameters: List=None, returnQuery: bool=None) -> any:
+    def get_external_data_structure_data(self, externalDataStructureName: str,
+                                         filterParameters: List = None, returnQuery: bool = None) -> any:
         pass
 
     # EnterpriseBusinessUnitService Methods
+
+    def assign_business_unit_to_entities(self, businessUnitNames: List[str],
+                                         entities: List[EBUEntity], changeReason: str = None) -> bool:
+        pass
+
     # ExamService Methods
+
+    def get_exam(self, examID: str) -> Exam:
+        pass
+
+    def score_exam(self, examID: str, packetID: str, answerStruct: List[ExamAnswer], isPreExam=None) -> bool:
+        pass
+
+    def get_exam_results(self, examPerformanceID: str) -> Exam:
+        pass
+
     # ExternalGUIService Methods
+
+    def get_external_route_builder_url(self, routeID: str, closeMethod: str = None, exitURL: str = None,
+                                       showChangeRequest: bool = None, showNotify: bool = None,
+                                       showEscalation: bool = None, showShredRedlines: bool = None,
+                                       showModifyUserOptions: bool = None) -> str:
+        pass
+
+    def get_external_collaboration_url(self, taskID: str, closeMethod: str = None, exitURL: str = None) -> str:
+        pass
+
     # ExternalTraining Methods
+
+    def import_training(self, userName: str, courseName: str, courseNumber: str, completionDate: str,
+                        source: str, score: str, status: str, courseDescription: str,
+                        attachment: BinaryFile) -> str:
+        pass
+
     # FileLibraryService Methods
+
+    def get_library_info(self, formatTimes: bool = None) -> Query:
+        pass
+
     # FileService Methods
     # HTMLFormService Methods
     # ImportService Methods
@@ -466,7 +551,32 @@ class Session:
     # TrainingTaskFileService Methods
     # TypeService Methods
     # UserService Methods
+
+
+    
     # VaultService Methods
+
+    def get_all_vaults(self) -> Vaults:
+        reqJSON = {"arguments":{"connectionID":self.connectionID},
+                "methodName":"getAllVaults","serviceName":"VaultService"}
+        vaultsJSON = requests.get(self.url, json = reqJSON)
+        pass
+
+    def get_doc_view_vaults(self) -> Vaults:
+        pass
+
+    def get_lifecycles_for_user(self, lifecyclePhaseOrder: str = None, rightName: str = None) -> any:
+        pass
+
+    def update_vault(self, vaultName: str, newVaultName: str = None, vaultDescription: str = None,
+                     enterpriseBusinessUnits: List = None) -> bool:
+        pass
+
+
+
+
+
+
     def getAllUsers(self, numUsers : int, includeRoles : bool = False):
         reqJSON = {
         "arguments":{
@@ -513,9 +623,6 @@ class Session:
         "methodName":"getAllRoles",
         "serviceName":"UserService"}
         return requests.get(self.url, json = reqJSON) 
-    def getAllVaults(self):
-        reqJSON = {"arguments":{"connectionID":self.connectionID},
-                "methodName":"getAllVaults","serviceName":"VaultService"}
-        return requests.get(self.url, json = reqJSON)
+    
     
 
