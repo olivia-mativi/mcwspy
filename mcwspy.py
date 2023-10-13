@@ -17,9 +17,9 @@
 import os
 import requests                # https://requests.readthedocs.io/en/latest/
 from dotenv import load_dotenv # https://github.com/theskumar/python-dotenv
-#from array import array
 from struct import Struct
-from typing import List
+from typing import List, Any
+import json
 
 
 class CustomField:
@@ -103,7 +103,20 @@ class PacketType:
                  optionalPacketSections: OptionalPacketSections = None,
                  packetContentOptions: PacketContentOptions = None,
                  packetTypeInformation: PacketTypeInformation = None) -> None:
-        pass
+        self.defaultWorkflows = defaultWorkflows
+        self.isAdvanced = isAdvanced
+        self.name = name
+        self.numberingSeries = numberingSeries
+        self.businessUnits = businessUnits
+        self.optionalPacketSections = optionalPacketSections
+        self.packetContentOptions = packetContentOptions
+        self.packetTypeInformation = packetTypeInformation
+        if(type(self.optionalPacketSections) != OptionalPacketSections):
+            pass
+        if(type(self.packetContentOptions) != PacketContentOptions):
+            pass
+        if(type(self.packetTypeInformation) != PacketTypeInformation):
+            pass
 
 
 class File:
@@ -356,9 +369,149 @@ class Vaults:
         pass
 
 
+class FileLite:
+    def __init__(self, fileName: str = None, message: str = None, url: str = None) -> None:
+        pass
+
+
+class WebLink:
+    def __init__(self, message: str = None, url: str = None) -> None:
+        pass
+
+
+class HTMLForm:
+    def __init__(self, data: str = None, result: str = None) -> None:
+        pass
+
+
+class InfoCardImportItem:
+    def __init__(self, infoCardNumberOrNumberingSeries: str, infoCardType: str,
+                 lifecycle: str, revision: str, title: str, author: str = None,
+                 changeNumber: str = None, createCourse: bool = False,
+                 documentConnectionsURL: str = None, effectiveDate: str = None,
+                 expirationDate: str = None, filePath: str = None,
+                 lastReviewDate: str = None, notes: str = None,
+                 owner: str = None, releaseDate: str = None,
+                 previousNumber: str = None, revisionOrdinalNumber: int = None,
+                 subtype: str = None, useNumberingSeries: bool = False) -> None:
+        pass
+
+
+class User:
+    def __init__(self, active: int = None, address1: str = None, address2: str = None,
+                 changeApproveOnNextLogin: str = None, changePasswordOnNextLogin: str = None,
+                 city: str = None, company: str = None, country: str = None,
+                 createDate: str = None, createdBy: str = None, deleteDate: str = None,
+                 department: str = None, displayName: str = None, email: str = None,
+                 employeeNumber: str = None, enabled: bool = False, esigLocked: str = None,
+                 esigPassword: str = None, fax: str = None, firstName: str = None,
+                 jobTitle: str = None, lastName: str = None, loginLocked: str = None,
+                 message: str = None, password: str = None, phone: str = None,
+                 roles: List = None, state: str = None, suffix: str = None,
+                 supervisor: str = None, title: str = None, userGUID: str = None,
+                 userID: str = None, userName: str = None, zipCode: str = None) -> None:
+        pass
+
+
+class ContactInformation:
+    def __init__(self, address1: str = None, address2: str = None,
+                 city: str = None, company: str = None, country: str = None,
+                 fax: str = None, phone: str = None, state: str = None,
+                 zipCode: str = None) -> None:
+        pass
+
+
+class UserInformation:
+    def __init__(self, active: int = None,
+                 createDate: str = None, createdBy: str = None, deleteDate: str = None, 
+                 department: str = None, displayName: str = None, email: str = None, 
+                 employeeNumber: str = None, enabled: bool = False, esigLocked: str = None, 
+                 esigPassword: str = None, firstName: str = None, 
+                 jobTitle: str = None, lastName: str = None, loginLocked: str = None, 
+                 message: str = None, password: str = None, 
+                 supervisor: str = None, title: str = None, userGUID: str = None, 
+                 userID: str = None, userName: str = None) -> None:
+        pass
+
+
+class FullUser:
+    def __init__(self, contactInformation: ContactInformation = None,
+                 userInformation: UserInformation = None) -> None:
+        pass
+
+
+class Users:
+    def __init__(self, message: str = None, users: List[User] = None) -> None:
+        pass
+
+
+class UploadBatchFile:
+    def __init__(self, fileName: str, filePath: str, mimeType: str) -> None:
+        pass
+
+
+class SearchParameter:
+    def __init__(self, custom: bool = None, identifier: str = None,
+                 label: str = None, logic: str = None, operator: str = None,
+                 value: str = None) -> None:
+        """_summary_ A search parameter object that houses and generates JSON to be used in search queries.
+
+        Args:
+            custom (bool, optional): _description_. Custom Field Identifier. Defaults to None.
+            identifier (str, optional): _description_. Defaults to None.
+            label (str, optional): _description_. Defaults to None.
+            logic (str, optional): _description_. And/Or. Defaults to None.
+            operator (str, optional): _description_. =/!=/>=/<=/>/</like/notlike/starts/ends. Defaults to None.
+            value (str, optional): _description_. Value to compare. Defaults to None.
+        """
+        self.custom = custom
+        self.identifier = identifier
+        self.label = label
+        self.logic = logic
+        self.operator = operator
+        self.value = value
+        self.dict = {
+            "operator": self.operator,
+            "custom": str(self.custom),
+            "label": self.label,
+            "identifier": self.identifier,
+            "value": self.value,
+            "logic": self.logic
+        }
+
+
+class SearchParameters:
+    def __init__(self, parameters: List[SearchParameter] = None) -> None:
+        self.dict = {
+            "searchParameters":{
+                "message":"",
+                "parameters":[]
+            }
+        }
+        #create a list that is the attributes of the params
+        self.paramAttributes = []
+        for param in parameters:
+            self.paramAttributes.append(param.dict)
+        self.dict["searchParameters"]["parameters"].extend(self.paramAttributes)
+        self.json = json.dumps(self.dict, indent=4)
+        
+
+class Row:
+    def __init__(self, columns: List[KeyValuePair] = None) -> None:
+        self.columns = columns
+
+
+class RecordSet:
+    def __init__(self, columnList: str = None, recordCount: int = None, rows: List[Row] = None) -> None:
+        self.columnList = columnList
+        self.recordCount = recordCount
+        self.rows = rows
+
+
 class Session:
     def __init__(self, logout: bool=False) -> None:
-        """Creates a new MasterControl WS Session
+        """Creates a new MasterControl WS Session. Site URL and API key must be
+        set in a .env file.
 
         Args:
             logout (bool, optional): Logout current web connection. Defaults to False.
@@ -384,13 +537,45 @@ class Session:
         self.connectionID = requests.post(self.url, json = self.authJSON).json()['result']
         print("Session Initialized: " + self.connectionID)
     
+    def build_search_arguments(self, searchParameters: dict, listPage: str):
+        searchArgs = {
+            "connectionID":self.connectionID,
+            "list":listPage
+        }
+        searchArgs.update(searchParameters)
+        #searchParameters["list"] = listPage
+        #searchParameters["connectionID"] = self.connectionID
+        return searchArgs
+
+    def build_request_json(self, methodName: str, serviceName: str, **kwargs) -> dict:
+        dict = {
+            "serviceName":serviceName,
+            "methodName":methodName,
+            "arguments":kwargs
+        }
+        return dict
+
     # AdvancedPacketService Methods
 
     def get_advanced_packet_task(self, task: Task) -> AdvancedPacketTask:
         pass
 
     def get_packet_type(self, packetName: str) -> PacketType:
-        pass
+        reqjson = self.build_request_json("getPacketType", 
+                                       "AdvancedPacketService",
+                                       **{"packetName":packetName,
+                                          "connectionID":self.connectionID})
+        result = requests.get(self.url, json=reqjson)
+        result = result.json()
+        pktType = PacketType(result["result"]["defaultWorkflows"],
+                             result["result"]["isAdvanced"],
+                             result["result"]["name"],
+                             result["result"]["numberingSeries"],
+                             result["result"]["businessUnits"],
+                             result["result"]["optionalPacketSections"],
+                             result["result"]["packetContentOptions"],
+                             result["result"]["packetTypeInformation"])
+        return pktType
 
     def get_packet_types(self, filter: str = None) -> List[PacketType]:
         pass
@@ -531,8 +716,117 @@ class Session:
         pass
 
     # FileService Methods
+
+    def get_binary_pdf(self, infoCardNumber: str, revision: str, pdfType: str, trainingCourseID: str = None) -> BinaryFile:
+        pass
+
+    def get_pdf(self, infoCardNumber: str, revision: str, pdfType: str, directoryPath: str = None, trainingCourseID: str = None) -> FileLite:
+        """DEPRECATED FOR CLOUD-BASED SYSTEMS
+
+        Args:
+            infoCardNumber (str): _description_
+            revision (str): _description_
+            pdfType (str): _description_
+            directoryPath (str, optional): _description_. Defaults to None.
+            trainingCourseID (str, optional): _description_. Defaults to None.
+
+        Returns:
+            FileLite: _description_
+        """
+        pass
+
+    def get_file(self, infoCardNumber: str, revision: str, directoryPath: str = None, trainingCourseID: str = None) -> FileLite:
+        """DEPRECATED FOR CLOUD-BASED SYSTEMS
+
+        Args:
+            infoCardNumber (str): _description_
+            revision (str): _description_
+            directoryPath (str, optional): _description_. Defaults to None.
+            trainingCourseID (str, optional): _description_. Defaults to None.
+
+        Returns:
+            FileLite: _description_
+        """
+        pass
+    
+    def get_binary_file(self, infoCardNumber: str, revision: str, trainingCourseID: str = None) -> BinaryFile:
+        pass
+
+    def get_binary_attachments(self, infoCardNumber: str, revision: str) -> Struct:
+        pass
+
+    def get_file_details(self, infoCardNumber: str, infoCardRevision: str) -> List[File]:
+        pass
+
+    def upload_file(self, infoCardNumber: str, revision: str, filePath: str, fileType: str = None,
+                    saveType: str = None, reason: str = None) -> FileLite:
+        pass
+
+    def upload_binary(self, infoCardNumber: str, revision: str, binaryFile: BinaryFile, fileType: str = None,
+                      saveType: str = None, reason: str = None) -> BinaryFile:
+        pass
+
+    def get_file_link_by_infocard_number_and_rev(self, infoCardNumber: str, revision: str, securityType: str,
+                                                 linkType: str) -> WebLink:
+        pass
+
+    def get_file_link(self, infoCardID: str, securityType: str, linkType: str) -> WebLink:
+        pass
+
+    def get_file_link_by_num_rev(self, infoCardNumber: str, revision: str, securityType: str,
+                                 linkType: str) -> WebLink:
+        pass
+
+    def get_latest_redline_binary_file(self, taskID: str, docNum: str, docRev: str) -> BinaryFile:
+        pass
+
+    def get_binary_sub_file(self, infoCardID: str, subFileID: str) -> BinaryFile:
+        pass
+
+    def is_connection_valid(self) -> bool:
+        pass
+
     # HTMLFormService Methods
+
+    def get_html_form(self, packetID: str, packetName: str, stepID: str, pStepID: str, event: str, 
+                      altUser: str, formTemplate: str, formID: str) -> HTMLForm:
+        pass
+
+    def get_html_form_in_json(self) -> HTMLForm:
+        pass
+
+    def add_attachment(self, formID: str, fieldName: str, fileName: str, base64) -> str:
+        pass
+
+    def get_max_array_id_for_field(self, formID: str, fieldID: str) -> int:
+        pass
+
+    def get_form_id(self, packetID: str) -> str:
+        pass
+
+    def get_attachments(self, formID, fieldName) -> Query:
+        pass
+
+    def get_attachment_info(self, attachmentID: str, formID: str) -> Struct:
+        pass
+    
+    def remove_attachment(self, attachmentID, fieldName, formID) -> bool:
+        pass
+
+    def can_edit_attachments(self, packetID: str, currentStepID: str, pageNumber: str) -> bool:
+        pass
+
     # ImportService Methods
+
+    def infocard_import(self, infoCardImportItems: List[InfoCardImportItem]) -> Struct:
+        pass
+
+    def upload_files_for_batch(self, batchName: str) -> List[UploadBatchFile]:
+        pass
+    
+    def get_files_for_batch(self, batchName: str) -> List[UploadBatchFile]:
+        pass
+
     # InfocardService Methods
     # InfoCardTypeService Methods
     # LicenseService Methods
@@ -541,6 +835,14 @@ class Session:
     # RecallService Methods
     # RouteService Methods
     # SearchService Methods
+
+    def get_json_search_fields(self, list: str) -> SearchParameters:
+        pass
+
+    def search(self, searchdict: dict) -> Any:
+        response = requests.get(self.url, json=searchdict)
+        return response.json()
+
     # SignatureService Methods
     # SupplierService Methods
     # TaskService Methods
@@ -552,8 +854,48 @@ class Session:
     # TypeService Methods
     # UserService Methods
 
+    def get_all_users(self, includeRoleMembership: bool = False, startIndex: int = None,
+                      count: int = None) -> Users:
+        pass
 
+    def get_user_locale(self, userID: str = None) -> str:
+        pass
+
+    def get_user_by_id(self, userID: str) -> User:
+        pass
     
+    def get_full_user_by_user_name(self, userName: str) -> FullUser:
+        pass
+    
+    def change_time_zone(self, timeZone: str, editedUserID: str = None) -> bool:
+        pass
+
+    def change_language(self, language: str) -> bool:
+        pass
+
+    def create_user(self, user: User, activeDirectoryUserName: str = None,
+                    activeDirectory: str = None) -> bool:
+        pass
+
+    def update_user(self, user: User, contactInformation: ContactInformation = None, reason: str = None) -> bool:
+        pass
+
+    def add_user_to_role(self, userID: str, roleName: str) -> bool:
+        pass
+
+    def get_all_roles(self, includeUserMembership: bool = False, startIndex: int = None, count: int = None) -> List:
+        pass
+
+    def delete_user_from_role(self, userID: str, roleName: str, clearCache: bool = False) -> bool:
+        pass
+
+    def is_member(self, userID: str, roleName: str) -> bool:
+        pass
+
+    def get_members(self, roleName: str) -> Any:
+        pass
+
+
     # VaultService Methods
 
     def get_all_vaults(self) -> Vaults:
@@ -565,7 +907,7 @@ class Session:
     def get_doc_view_vaults(self) -> Vaults:
         pass
 
-    def get_lifecycles_for_user(self, lifecyclePhaseOrder: str = None, rightName: str = None) -> any:
+    def get_lifecycles_for_user(self, lifecyclePhaseOrder: str = None, rightName: str = None) -> Any:
         pass
 
     def update_vault(self, vaultName: str, newVaultName: str = None, vaultDescription: str = None,
@@ -623,6 +965,6 @@ class Session:
         "methodName":"getAllRoles",
         "serviceName":"UserService"}
         return requests.get(self.url, json = reqJSON) 
-    
+
     
 
